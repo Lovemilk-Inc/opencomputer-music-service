@@ -57,10 +57,7 @@
             }
 
             window.open('https://google' + topDomain + '/chrome/', '_blank');
-
-            // while (1) {
-            //     console.debug('Fuck IE')
-            // }
+            Http.onreadystatechange = null  // 以免多次回调
         }
 
         Http.onreadystatechange = callback
