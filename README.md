@@ -18,5 +18,5 @@
 3. 尽情享受吧!
 
 ## 版权声明
-[^mc]: Minecraft 是 Mojang 和/或 Microsoft 旗下的一款沙盒游戏的名称
-[^oc]: Opencomputer 是 Minecraft 的一个第三方模组
+[^mc]: Minecraft 是 Mojang Studios 和/或 Microsoft Corporation 旗下的一款沙盒游戏的名称
+[^oc]: OpenComputer 是 Minecraft 的一个第三方模组
