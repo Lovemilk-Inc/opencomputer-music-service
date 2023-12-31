@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-multipart
+loguru
+ffmpeg-python
+aiohttp
+poetry  # 用于 build
+# 友商提供 dfpwm, GitHub: https://github.com/CyanChanges/python-dfpwm
+# 注意: dfpwm 需要 numpy, 您可能需要安装 *系统包* python-dev / python3-dev 以解决 numpy 找不到 Python.h 的问题
+dfpwm>=0.1.5
+soundfile  # 部分 python 不自带

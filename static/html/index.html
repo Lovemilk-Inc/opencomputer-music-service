@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh" data-darkreader-scheme="dark">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>DFPWM 转换器</title>
+</head>
+<body>
+<div class="container" id="page">
+    <h2>DFPWM 转换器</h2>
+    <p>DFPWM 是一种动态滤波脉冲宽度调制的音频编码方式，它可以用于在 计算机工艺 (ComputerCraft) 或 计算机科学
+        (Computronics) 等 Minecraft 模组中播放音乐.</p>
+    <div class="card">
+        <div class="input-group">
+            <button class="btn btn-primary" type="button" id="uploadButton" onclick="upload()">上传</button>
+            <input type="file" class="form-control" id="upload" aria-label="Upload">
+        </div>
+    </div>
+    <p>提示: 您可以在 Minecraft 中按下 Insert 以粘贴内容</p>
+</div>
+<div class="container" id="underPage">
+    <nav class="navbar navbar-fixed-bottom" id="underPageNavbar">
+        <p id="cyansLink" class="text-body-secondary fst-italic">ICON 由
+            <a href="https://content.cyans.me" target="_blank" class="text-body-secondary">CyanChanges Content</a> 提供
+        </p>
+        <p>
+            <a href="/docs" target="_blank" class="text-body-secondary">接入 API</a>
+        </p>
+    </nav>
+</div>
+<script>
+    function getInternetExplorerVersion() {
+        let ua = window.navigator.userAgent;
+        let msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+            // If Internet Explorer, return version number
+            return parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)));
+        }
+    }
+
+    var isIE = getInternetExplorerVersion() !== undefined
+
+    if (isIE) {
+        document.body.innerHTML = '<h1>暂不支持 IE 访问, 即将跳转 Chrome 下载页面, 请稍候...</h1>';
+        const Http = new XMLHttpRequest();
+        // Http.timeout = 3000;
+        Http.open('GET', '/api/common/ipapi');  // 判断是否可以访问 国际互联网
+        Http.send();
+
+        function callback(e) {
+            const json = JSON.parse(Http.responseText)
+            let topDomain = '.cn'
+            if (json['countryCode'] && json['countryCode'] !== 'CN') {
+                topDomain = '.com'
+            }
+
+            window.open('https://google' + topDomain + '/chrome/', '_blank');
+
+            // while (1) {
+            //     console.debug('Fuck IE')
+            // }
+        }
+
+        Http.onreadystatechange = callback
+    }
+</script>
+<!--<script>-->
+<!--    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {-->
+<!--        const newColorScheme = event.matches ? "dark" : "light";-->
+<!--        const e = document.getElementsByTagName('html')[0];-->
+<!--        if (e) {-->
+<!--            e.setAttribute('data-darkreader-scheme', newColorScheme)-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+<script>
+    if (isIE) {
+        throw Error('fuck IE')
+    }
+
+    const cyansLink = document.getElementById('cyansLink')
+
+    cyansLink.style.fontSize = 'small';
+    cyansLink.style.transformOrigin = 'left center';
+    cyansLink.style.display = 'none';
+
+    function resizeFont() {
+        cyansLink.style.display = null;
+        if (window.devicePixelRatio < 1) {
+            cyansLink.style.transform = `scale(1 - ${(1 / window.devicePixelRatio)})`;
+            return
+        }
+        cyansLink.style.transform = `scale(${(1 / window.devicePixelRatio)})`;
+    }
+
+    resizeFont()
+    window.addEventListener('resize', resizeFont)
+</script>
+<script>
+    const ids = ['tips', 'downloadButton', 'downloadLink', 'copyLinkButton']
+
+    async function getLimit() {
+        const res = await fetch('/api/common/limit')
+        return res.json()
+    }
+
+    function tips(level = 'danger', msg = '', id = 'tips') {
+        const alert = document.createElement('div')
+        alert.id = id
+        alert.className = `alert alert-${level}`
+        alert.role = 'alert'
+        alert.innerText = msg
+
+        return alert
+    }
+
+    async function upload() {
+        const page = document.getElementById('page')
+
+        for (let i = 0; i < ids.length; i++) {
+            const _e = document.getElementById(ids[i])
+            if (_e) {
+                _e.remove()
+            }
+        }
+
+        const input = document.getElementById('upload')
+        const file = input.files[0]
+        if (!file) {
+            input.click()
+            input.onchange = () => {
+                if (input.files[0]) {
+                    input.onchange = null
+                    upload()
+                }
+            }
+
+            return
+        }
+
+        let limit = {}
+        try {
+            limit = await getLimit()
+            console.debug('limit', limit)
+        } catch (e) {
+        }
+
+        if (limit['maxsize'] && file.size > limit['maxsize']) {
+            page.insertAdjacentElement(
+                'beforeend',
+                tips('danger', `文件大小超出 ${(limit['maxsize'] / 1024 / 1024).toFixed(2)} MiB 上限`)
+            )
+
+            return
+        }
+
+        const button = document.getElementById('uploadButton')
+        button.disabled = true;
+        button.innerText = '正在上传和转换, 请坐和放宽';
+        input.disabled = true;
+
+        const msg = new FormData();
+        msg.append('file', file)
+
+        const start = Date.now()
+
+        const res = await fetch(
+            '/api/upload/file',
+            {
+                method: 'POST',
+                body: msg
+            }
+        )
+
+        const sleep = (limit['cd'] ?? 0) * 1000 - (Date.now() - start) - 100
+        button.innerText = '正在等待服务端冷却';
+        setTimeout(() => {
+            input.disabled = false;
+            button.disabled = false;
+            button.innerText = '上传';
+        }, sleep > 0 ? sleep : 0)
+
+        const json = await res.json()
+        console.debug('upload', json)
+        if (!json['data']) {
+            json.data = {}
+        }
+        if (!res.ok || json.code !== 200) {
+            // const alert = document.createElement("div")
+            // alert.id = 'tips'
+            // alert.className = 'alert alert-danger'
+            // alert.role = 'alert'
+            // alert.innerText = ``
+
+            page.insertAdjacentElement(
+                'beforeend',
+                tips('danger', `上传失败: ${json['code'] ?? res.status}: ${json['msg'] ?? res.statusText}`)
+            )
+
+            return
+        }
+
+        input.value = null  // 取消选择
+
+        const fileId = json['data']['id']
+        const fileIdString = fileId ? ` ${fileId}` : ''
+
+        const downloadButton = document.createElement("button")
+        downloadButton.className = 'btn btn-primary'
+        downloadButton.type = 'button'
+        downloadButton.id = 'downloadButton'
+        downloadButton.onclick = () => {
+            window.open(encodeURI(json['data']['link']))
+        }
+        downloadButton.innerText = `下载 ${fileIdString}`
+
+        const downloadLink = document.createElement('textarea')
+        downloadLink.id = 'downloadLink'
+        downloadLink.readOnly = true
+        downloadLink.className = 'fs-4'
+        downloadLink.innerText = encodeURI(json['data']['link'])
+        downloadLink.style.width = '0px'
+        downloadLink.style.height = '0px'
+        downloadLink.style.resize = 'none'
+        downloadLink.style.border = 'none'
+        downloadLink.style.cursor = 'pointer'
+        downloadLink.style.background = 'RGBA(0, 0, 0, 0)'
+        downloadLink.style.color = 'RGBA(0, 0, 0, 0)'
+        downloadLink.style.forceground = 'RGBA(0, 0, 0, 0)'
+        downloadLink.style.pointerEvents = 'none'
+
+        const linkButton = document.createElement('button')
+        linkButton.addEventListener('click', async () => {
+            linkButton.insertAdjacentElement(
+                'beforeend',
+                downloadLink
+            )
+            downloadLink.select()
+            document.execCommand('copy')
+            linkButton.innerText = '链接已复制'
+            downloadLink.remove()
+        })
+        linkButton.id = 'copyLinkButton'
+        linkButton.className = 'btn btn-primary'
+        linkButton.innerText = '复制链接'
+        linkButton.style.marginLeft = '8px'
+
+        page.insertAdjacentElement(
+            'beforeend',
+            tips('success', '上传成功')
+        )
+        page.insertAdjacentElement(
+            'beforeend',
+            downloadButton
+        )
+        page.insertAdjacentElement(
+            'beforeend',
+            linkButton
+        )
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+</html>
