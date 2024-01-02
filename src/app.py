@@ -16,14 +16,16 @@ logger.add(
     rotation='00:00',
     diagnose=True,  # 显示错误原因 (将错误 stack 的每个 obj 的内容显示出来)
     retention='7 days',
-    level='ERROR'
+    level='ERROR',
+    encoding='u8',
 )
 logger.error(f'{"=" * 40} error loguru started! {"=" * 40}')
 logger.add(
     'logs/{time:YYYY-MM-DD}.log',
     rotation='00:00',
     retention='7 days',
-    backtrace=False
+    backtrace=False,
+    encoding='u8',
 )
 logger.success(f'{"=" * 40} loguru started! {"=" * 40}')
 replace_uvicorn_logger(logger)

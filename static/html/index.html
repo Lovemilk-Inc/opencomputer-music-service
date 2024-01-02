@@ -156,7 +156,7 @@
         const button = document.getElementById('uploadButton')
         button.disabled = true;
         button.innerText = '正在上传和转换, 请坐和放宽';
-        input.disabled = true;
+        // input.disabled = true;
 
         const msg = new FormData();
         msg.append('file', file)
@@ -174,7 +174,7 @@
         const sleep = (limit['cd'] ?? 0) * 1000 - (Date.now() - start) - 100
         button.innerText = '正在等待服务端冷却';
         setTimeout(() => {
-            input.disabled = false;
+            // input.disabled = false;
             button.disabled = false;
             button.innerText = '上传';
         }, sleep > 0 ? sleep : 0)
