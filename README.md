@@ -22,7 +22,7 @@
    ```sh
    cd ./opencomputer-music-service
    ```
-4. 创建 Python 虚拟环境 (如果有多个 Python 可能需要自行选择相应环境), 一般的可以在终端中运行如下指令: <br>
+4. 创建 Python 虚拟环境 (如果有多个 Python 可能需要自行选择相应环境), 一般地可以在终端中运行如下指令: <br>
    ```sh
    python -m venv ./venv
    ```
