@@ -16,7 +16,7 @@
 1. 安装 FFmpeg 和 Python >= 3.10 并配置入环境变量 (若有请跳过)
 2. 使用 git 或 GH CLI 克隆当前存储库 main 分支, 在终端中运行如下指令 (以 git 为例):
    ```sh
-   git clone https://github.com/zhuhansan666/opencomputer-music-service.git
+   git clone https://github.com/Lovemilk-Inc/opencomputer-music-service.git
    ```
 3. 将工作路径切换到克隆的目录, 在默认配置下可以在终端中运行如下指令:
    ```sh
