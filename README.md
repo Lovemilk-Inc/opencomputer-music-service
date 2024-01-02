@@ -31,6 +31,8 @@
       ```sh
       ./venv/Scripts/activate
       ```
+      > 如果您的 Powershell 提示无法运行 PS1 脚本, 请参阅 [此处](https://learn.microsoft.com/zh-cn/powershell/module/microsoft.powershell.core/about/about_scripts?view=powershell-7.4#how-to-run-a-script)
+      以修复, 并重新运行上述脚本
    2. 在 *nix (Unix 和 Unix-like) 可以在终端中运行: 
       ```sh
       source ./venv/bin/activate
