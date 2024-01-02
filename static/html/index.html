@@ -21,7 +21,7 @@
 </div>
 <div class="container" id="underPage">
     <nav class="navbar navbar-fixed-bottom" id="underPageNavbar">
-        <p id="cyansLink" class="text-body-secondary fst-italic">ICON 由
+        <p id="cyanLink" class="text-body-secondary fst-italic">ICON 由
             <a href="https://content.cyans.me" target="_blank" class="text-body-secondary">CyanChanges Content</a> 提供
         </p>
         <p>
@@ -40,6 +40,7 @@
         }
     }
 
+    // noinspection ES6ConvertVarToLetConst 以兼容 IE
     var isIE = getInternetExplorerVersion() !== undefined
 
     if (isIE) {
@@ -49,7 +50,7 @@
         Http.open('GET', '/api/common/ipapi');  // 判断是否可以访问 国际互联网
         Http.send();
 
-        function callback(e) {
+        function callback() {
             const json = JSON.parse(Http.responseText)
             let topDomain = '.cn'
             if (json['countryCode'] && json['countryCode'] !== 'CN') {
@@ -63,33 +64,24 @@
         Http.onreadystatechange = callback
     }
 </script>
-<!--<script>-->
-<!--    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {-->
-<!--        const newColorScheme = event.matches ? "dark" : "light";-->
-<!--        const e = document.getElementsByTagName('html')[0];-->
-<!--        if (e) {-->
-<!--            e.setAttribute('data-darkreader-scheme', newColorScheme)-->
-<!--        }-->
-<!--    });-->
-<!--</script>-->
 <script>
     if (isIE) {
         throw Error('fuck IE')
     }
 
-    const cyansLink = document.getElementById('cyansLink')
+    const cyanLink = document.getElementById('cyanLink')
 
-    cyansLink.style.fontSize = 'small';
-    cyansLink.style.transformOrigin = 'left center';
-    cyansLink.style.display = 'none';
+    cyanLink.style.fontSize = 'small';
+    cyanLink.style.transformOrigin = 'left center';
+    cyanLink.style.display = 'none';
 
     function resizeFont() {
-        cyansLink.style.display = null;
+        cyanLink.style.display = null;
         if (window.devicePixelRatio < 1) {
-            cyansLink.style.transform = `scale(1 - ${(1 / window.devicePixelRatio)})`;
+            cyanLink.style.transform = `scale(1 - ${(1 / window.devicePixelRatio)})`;
             return
         }
-        cyansLink.style.transform = `scale(${(1 / window.devicePixelRatio)})`;
+        cyanLink.style.transform = `scale(${(1 / window.devicePixelRatio)})`;
     }
 
     resizeFont()
@@ -145,6 +137,7 @@
         }
 
         if (limit['maxsize'] && file.size > limit['maxsize']) {
+            // noinspection SpellCheckingInspection
             page.insertAdjacentElement(
                 'beforeend',
                 tips('danger', `文件大小超出 ${(limit['maxsize'] / 1024 / 1024).toFixed(2)} MiB 上限`)
@@ -191,6 +184,7 @@
             // alert.role = 'alert'
             // alert.innerText = ``
 
+            // noinspection SpellCheckingInspection
             page.insertAdjacentElement(
                 'beforeend',
                 tips('danger', `上传失败: ${json['code'] ?? res.status}: ${json['msg'] ?? res.statusText}`)
@@ -230,11 +224,14 @@
 
         const linkButton = document.createElement('button')
         linkButton.addEventListener('click', async () => {
+            // noinspection SpellCheckingInspection
             linkButton.insertAdjacentElement(
                 'beforeend',
                 downloadLink
             )
             downloadLink.select()
+            // 牛奶 的 HTTPS 被玩坏了, 绝对不是 牛奶 的问题...
+            // noinspection JSDeprecatedSymbols
             document.execCommand('copy')
             linkButton.innerText = '链接已复制'
             downloadLink.remove()
@@ -244,14 +241,17 @@
         linkButton.innerText = '复制链接'
         linkButton.style.marginLeft = '8px'
 
+        // noinspection SpellCheckingInspection
         page.insertAdjacentElement(
             'beforeend',
             tips('success', '上传成功')
         )
+        // noinspection SpellCheckingInspection
         page.insertAdjacentElement(
             'beforeend',
             downloadButton
         )
+        // noinspection SpellCheckingInspection
         page.insertAdjacentElement(
             'beforeend',
             linkButton

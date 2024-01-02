@@ -26,7 +26,7 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     try:
         # ip = ip_address(request.client.host)  # 这个是 Cloudflare Proxy 的 IP
         ip = get_ipaddress(request)
-    except Exception as e:
+    except Exception:
         error_logger.error('failed to parse ip address')
         return {
             'code': 500,

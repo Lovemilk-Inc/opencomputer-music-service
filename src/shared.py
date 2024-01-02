@@ -4,7 +4,6 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from aiohttp import ClientSession
 from ipaddress import ip_address
-from json import dumps
 
 app = FastAPI()
 

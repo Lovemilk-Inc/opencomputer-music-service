@@ -38,7 +38,7 @@ async def ipapi(request: Request):
             'country': 'United States',
             'countryCode': 'US'
         }
-    except Exception as e:
+    except Exception:
         error_logger.error('failed to get ip api')
         return {
             'code': 400,
