@@ -1,6 +1,5 @@
 from pathlib import Path
 from time import time as get_time
-from uuid import uuid4
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, RedirectResponse
 
@@ -11,8 +10,8 @@ router = APIRouter(tags=['page'])
 async def favicon():
     return RedirectResponse(
         f'https://content.cyans.me/static/lovemilk-hosted/oms/favicon.ico?'
-        f'{uuid4()}={get_time()}&fuckTo=CyanChanges',
-        status_code=301
+        f'{get_time()}={get_time()}&fuckTo=CyanChanges',
+        status_code=301,
     )
 
 
