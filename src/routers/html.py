@@ -12,6 +12,9 @@ async def favicon():
         f'https://content.cyans.me/static/lovemilk-hosted/oms/favicon.ico?'
         f'{get_time()}={get_time()}&fuckTo=CyanChanges',
         status_code=301,
+        headers={
+            'origin': 'https://content.cyans.me',
+        }
     )
 
 
