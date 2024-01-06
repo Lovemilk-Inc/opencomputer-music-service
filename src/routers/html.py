@@ -13,7 +13,8 @@ async def favicon():
         f'{get_time()}={get_time()}&fuckTo=CyanChanges',
         status_code=301,
         headers={
-            'origin': 'https://content.cyans.me',
+            'Origin': 'https://content.cyans.me',
+            'Referer': 'https://content.cyans.me',
         }
     )
 
