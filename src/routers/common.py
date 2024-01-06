@@ -21,7 +21,6 @@ async def get_limit():
 @router.get('/ipapi')
 async def ipapi(request: Request):
     from src.shared import session
-
     try:
         res = await session.get(f'http://ip-api.com/json/{get_ipaddress(request)}', params={'fields': '66846719'})
         data = await res.json()
