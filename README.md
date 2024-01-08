@@ -10,8 +10,8 @@
 
 ## 使用方法 (2, 不推荐)
 访问官方样例站点 (任选可访问的其一):
-1. <http://dfpwm.lovemilk.top:20100>
-2. <https://dfpwm.lovemilk.top:2053>
+1. <https://dfpwm.lovemilk.top:2053/>
+2. <http://dfpwm.lovemilk.top:20100/>
 
 > 官方样例站点仅供测试和预览, 不对可用性保证, 切勿在生产环境使用示例站点 API, 否所造成的一切后果由使用者/团体承担
 
