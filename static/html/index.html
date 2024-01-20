@@ -21,9 +21,6 @@
 </div>
 <div class="container" id="underPage">
     <nav class="navbar navbar-fixed-bottom" id="underPageNavbar">
-        <p id="cyanLink" class="text-body-secondary fst-italic">ICON 由
-            <a href="https://content.cyans.me" target="_blank" class="text-body-secondary">CyanChanges Content</a> 提供
-        </p>
         <p class="text-body-secondary fst-italic">
             <a href="/docs" target="_blank" class="text-body-secondary">接入 API</a>
         </p>
@@ -119,8 +116,7 @@
         try {
             limit = await getLimit()
             console.debug('limit', limit)
-        } catch (e) {
-        }
+        } catch (e) { }
 
         if (limit['maxsize'] && file.size > limit['maxsize']) {
             // noinspection SpellCheckingInspection
